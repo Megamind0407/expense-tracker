@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { InnerLayout } from '../../styles/Layouts';
 import { useGlobalContext } from '../../context/globalContext';
@@ -6,6 +6,10 @@ import Form from '../Form/Form';
 
 function Income() {
     const {addIncome,incomes,getIncomes} = useGlobalContext()
+
+    useEffect(() => {
+        getIncomes()
+    }, [])
 
     return (
         <IncomeStyled>
@@ -16,7 +20,10 @@ function Income() {
                         <Form/>
                     </div>
                     <div className='incomes'>
-
+                        {incomes.map((income) => {
+                            const {id, title, amount, date, category, description } = income;
+                            return <Income></Income>
+                        })}
                     </div>
                     
                 </div>
