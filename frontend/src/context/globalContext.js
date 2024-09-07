@@ -16,7 +16,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.post(`${BASE_URL}add-income`, income);
             await getIncomes();  // Refresh income list after adding
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
@@ -26,7 +26,7 @@ export const GlobalProvider = ({ children }) => {
             setIncomes(response.data);
             console.log(response.data);
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
@@ -35,7 +35,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.delete(`${BASE_URL}delete-income/${id}`);
             await getIncomes();  // Refresh income list after deletion
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
@@ -49,7 +49,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.post(`${BASE_URL}add-expense`, expense);
             await getExpenses();  // Refresh expense list after adding
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
@@ -59,7 +59,7 @@ export const GlobalProvider = ({ children }) => {
             setExpenses(response.data);
             console.log(response.data);
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
@@ -68,7 +68,7 @@ export const GlobalProvider = ({ children }) => {
             await axios.delete(`${BASE_URL}delete-expense/${id}`);
             await getExpenses();  // Refresh expense list after deletion
         } catch (err) {
-            setError(err.response?.data?.message || 'An error occurred');
+            setError(err.response?.data?.message);
         }
     };
 
