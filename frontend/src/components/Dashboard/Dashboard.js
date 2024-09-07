@@ -12,7 +12,7 @@ function Dashboard() {
     useEffect(() => {
         getIncomes()
         getExpenses()
-    }, [])
+    }, [getIncomes, getExpenses])
 
     return (
         <DashboardStyled>
@@ -73,15 +73,15 @@ const DashboardStyled = styled.div`
     .stats-con{
         display: grid;
         grid-template-columns: repeat(5, 1fr);
-        gap: 2rem;
+        gap: 1.5rem; 
         .chart-con{
             grid-column: 1 / 4;
-            height: 400px;
+            height: 350px; 
             .amount-con{
                 display: grid;
                 grid-template-columns: repeat(4, 1fr);
-                gap: 2rem;
-                margin-top: 2rem;
+                gap: 1.5rem; /* Reduced gap */
+                margin-top: 1.5rem; 
                 .income, .expense{
                     grid-column: span 2;
                 }
@@ -90,9 +90,9 @@ const DashboardStyled = styled.div`
                     border: 2px solid #FFFFFF;
                     box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
                     border-radius: 20px;
-                    padding: 1rem;
+                    padding: 1.5rem; 
                     p{
-                        font-size: 3.5rem;
+                        font-size: 2.8rem; 
                         font-weight: 700;
                     }
                 }
@@ -106,7 +106,7 @@ const DashboardStyled = styled.div`
                     p{
                         color: var(--color-green);
                         opacity: 0.6;
-                        font-size: 4.5rem;
+                        font-size: 3.5rem; /* Reduced font size */
                     }
                 }
             }
@@ -115,29 +115,29 @@ const DashboardStyled = styled.div`
         .history-con{
             grid-column: 4 / -1;
             h2{
-                margin: 1rem 0;
+                margin: 0.8rem 0; 
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
             }
             .salary-title{
-                font-size: 1.2rem;
+                font-size: 1rem; 
                 span{
-                    font-size: 1.8rem;
+                    font-size: 1.5rem; 
                 }
             }
             .salary-item{
                 background: #FCF6F9;
                 border: 2px solid #FFFFFF;
                 box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-                padding: 1rem;
+                padding: 0.8rem; 
                 border-radius: 20px;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 p{
                     font-weight: 600;
-                    font-size: 1.6rem;
+                    font-size: 1.4rem;
                 }
             }
         }
