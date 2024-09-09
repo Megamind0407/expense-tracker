@@ -46,7 +46,7 @@ function AppContent() {
     <AppStyled className="App">
       {orbMemo}
       <Routes>
-        <Route path="/" element={<SignUp />} />
+        <Route path="" element={<SignUp />} />
         <Route path="/signin" element={<SignIn onSignIn={handleSignIn} />} />
         {isAuthenticated ? (
           <Route path="/signin" element={<SignIn onSignIn={handleSignIn} />} />
