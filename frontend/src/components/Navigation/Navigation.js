@@ -1,17 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import avatar from '../../assets/avatar.png'
-import {menuItems} from '../../utils/menuItems'
+import { menuItems } from '../../utils/menuItems'
 import { signout } from '../../utils/Icons'
+import { useNavigate } from 'react-router-dom'
 
 
 
-function Navigation({active, setActive}) {
-    
+
+function Navigation({ active, setActive }) {
+    const navigate = useNavigate()
+    const handleSignOutClick = () => {
+        navigate('/signin')
+    };
     return (
         <NavStyled>
             <div className='user-con'>
-                <img src={avatar} alt=''/>
+                <img src={avatar} alt='' />
                 <div className='text'>
                     <h2>User</h2>
                     <p>Your Money</p>
@@ -22,18 +27,21 @@ function Navigation({active, setActive}) {
                     return <li
                         key={item.id}
                         onClick={() => setActive(item.id)}
-                        className={active === item.id ? 'active': ''}
+                        className={active === item.id ? 'active' : ''}
                     >
                         {item.icon}
                         <span>{item.title}</span>
                     </li>
                 })}
             </ul>
-            <div className='bottom-nav'>
-                <li>
-                    {signout} Sign Out
-                </li>
+            <div className="App">
+                <div className="bottom-nav">
+                    <button onClick={handleSignOutClick}>
+                        {signout}Sign Out
+                    </button>
+                </div>
             </div>
+
         </NavStyled>
     )
 }
