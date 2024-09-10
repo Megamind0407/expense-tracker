@@ -35,6 +35,6 @@ The Expense Tracker is a web application designed to help users manage their per
 
 **Contributing**
 
-- Feel free to fork this repository and submit pull requests. Contributions are welcome!
+- Feel free to fork this repository and submit pull requests. Contributions are welcome! 🤹‍♂️
 
 
