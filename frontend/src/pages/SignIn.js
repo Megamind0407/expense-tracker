@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState(''); 
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here, then navigate to the dashboard
-        navigate('/dashboard');
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/signin', { email, password });
+            localStorage.setItem('token', response.data.token);
+
+            navigate('/dashboard');
+        } catch (error) {
+            setError('Invalid email or password. Please try again.');
+        }
     };
 
     const handleRegister = () => {
-        navigate('/'); // Redirect to the signup page
+        navigate('/signup');
     };
 
     return (
@@ -40,9 +48,10 @@ const SignIn = () => {
                             required
                         />
                     </FormField>
+                    {error && <ErrorMessage>{error}</ErrorMessage>}
                     <SubmitButton type="submit">Sign In</SubmitButton>
                 </form>
-                <RegisterLink onClick={handleRegister}>Don't have an account? Register here.</RegisterLink>
+                <p style={{fontSize : "1rem", marginTop: '1rem'}}>Don't have an account? <RegisterLink onClick={handleRegister}>Register here</RegisterLink></p>
             </FormContainer>
         </SignInWrapper>
     );
@@ -116,16 +125,17 @@ const SubmitButton = styled.button`
     }
 `;
 
-const RegisterLink = styled.button`
-    margin-top: 1rem;
-    background: none;
-    border: none;
+const RegisterLink = styled.span`
     color: black;
     cursor: pointer;
-    font-size: 1rem;
-    text-decoration: underline;
-
     &:hover {
-        color: black;
+        text-decoration: underline;
     }
+`;
+
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
 `;

@@ -1,17 +1,44 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import styled from 'styled-components';
 import SignIn from './SignIn';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
     const [showSignIn] = useState(false);
     const navigate = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        navigate('/signin');
+
+        if (!email || !password) {
+            setError('Please enter valid email and password.');
+            return;
+        }
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/v1/signup', {
+                email,
+                password,
+            });
+
+            if (response.data.success) {
+                navigate('/');
+            } else if (response.data.message === 'User already exists') {
+                setError('Already registered');
+            } else {
+                setError(response.data.message || 'Error signing up. Please try again.');
+            }
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.error !== 'User already exists') {
+                setError('Failed to sign up. Please try again.');
+            } else {
+                setError('Already registered');
+            }
+        }
     };
 
     return (
@@ -40,6 +67,18 @@ const SignUp = () => {
                                 required
                             />
                         </FormField>
+                        {error && (
+                            <ErrorMessage>
+                                {error === 'Already registered' ? (
+                                    error
+                                ) : (
+                                    
+                                    <>
+                                    {error}. <Link to="/">Sign in here</Link>.
+                                </>
+                                )}
+                            </ErrorMessage>
+                        )}
                         <SubmitButton type="submit">Sign Up</SubmitButton>
                     </form>
                 </FormContainer>
@@ -113,5 +152,18 @@ const SubmitButton = styled.button`
 
     &:hover {
         background-color: #0056b3;
+    }
+`;
+
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 0.9rem;
+    margin-top: -1rem;
+    margin-bottom: 1rem;
+
+    a {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer;
     }
 `;

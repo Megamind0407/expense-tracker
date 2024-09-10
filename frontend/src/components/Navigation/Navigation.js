@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 function Navigation({ active, setActive }) {
     const navigate = useNavigate()
     const handleSignOutClick = () => {
-        navigate('/signin')
+        navigate('/')
     };
     return (
         <NavStyled>
