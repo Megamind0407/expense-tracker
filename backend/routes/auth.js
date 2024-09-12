@@ -3,6 +3,23 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const router = express.Router();
+const authMiddleware = require('../middleware/authMiddleware'); // Import the middleware
+const Expense = require('../models/ExpenseModel');
+
+// Get User-Specific Data (Expenses, for example)
+router.get('/user/:userId/data', authMiddleware, async (req, res) => {
+    const userId = req.params.userId;
+    try {
+        if (req.user !== userId) {
+            return res.status(403).json({ message: 'Unauthorized access' });
+        }
+
+        const expenses = await Expense.find({ userId });
+        res.json({ expenses });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
 
 // Signup Route
 router.post('/signup', async (req, res) => {
@@ -32,6 +49,7 @@ router.post('/signup', async (req, res) => {
     }
 });
 
+
 // Signin Route
 router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
@@ -59,7 +77,8 @@ router.post('/signin', async (req, res) => {
 
         res.json({
             success: true,
-            token
+            token,
+            userId: user._id  // Include userId in the response
         });
     } catch (error) {
         res.status(500).json({
@@ -68,5 +87,6 @@ router.post('/signin', async (req, res) => {
         });
     }
 });
+
 
 module.exports = router;
