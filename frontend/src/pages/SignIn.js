@@ -2,22 +2,43 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
+import { useGlobalContext } from '../context/globalContext';
 
 const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(''); 
     const navigate = useNavigate();
+    const { clearData, setExpenses, setIncomes } = useGlobalContext();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError('');
         try {
             const response = await axios.post('http://localhost:5000/api/v1/signin', { email, password });
             localStorage.setItem('token', response.data.token);
-
+            const userId = response.data.userId;  // Get userId from response
+            clearData();
+            await loadUserData(userId);
             navigate('/dashboard');
         } catch (error) {
             setError('Invalid email or password. Please try again.');
+        }
+    };
+
+    const loadUserData = async (userId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.get(`http://localhost:5000/api/v1/user/${userId}/data`, {
+                headers: {
+                    Authorization: `Bearer ${token}`  // Include the token in the headers
+                },
+            });
+            setExpenses(response.data.expenses);
+            setIncomes(response.data.incomes); 
+        } catch (error) {
+            console.error('Failed to load user data', error);
+            setError('Failed to load user data. Please try again.');
         }
     };
 
