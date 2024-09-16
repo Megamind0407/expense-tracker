@@ -121,6 +121,31 @@ const NavStyled = styled.nav`
             border-radius: 0 10px 10px 0;
         }
     }
+    .bottom-nav {
+        display: flex;
+        margin-top: 2rem;
+        button {
+            background-color: transparent;
+            color: black;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            
+            &:hover {
+                background-color: rgba(0,0,0,0.1);
+            }
+
+            i {
+                font-size: 1.2rem;
+            }
+        }
+    }
 `;
 
 
