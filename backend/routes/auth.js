@@ -55,13 +55,16 @@ router.post('/signin', async (req, res) => {
     const { email, password } = req.body;
 
     try {
+        // Check if email exists in the database
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid email or password'
+                message: 'Invalid email or password'  // Hide which one is wrong for security
             });
         }
+
+        // Check if password matches
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({
@@ -69,24 +72,30 @@ router.post('/signin', async (req, res) => {
                 message: 'Invalid email or password'
             });
         }
+
+        // Generate JWT token
         const token = jwt.sign(
-            { userId: user._id },
+            { userId: user._id },  // Add any other relevant information to the payload
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
 
-        res.json({
+        // Send success response with token and userId
+        return res.status(200).json({
             success: true,
             token,
-            userId: user._id  // Include userId in the response
+            userId: user._id
         });
+
     } catch (error) {
-        res.status(500).json({
+        console.error('Error during sign-in:', error);  // Log the error for debugging
+
+        // Send a generic error response to the client
+        return res.status(500).json({
             success: false,
-            message: 'Server error'
+            message: 'Server error. Please try again later.'
         });
     }
 });
-
 
 module.exports = router;

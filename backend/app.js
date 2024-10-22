@@ -11,22 +11,15 @@ const PORT = process.env.PORT || 5000;
 // Middlewares
 app.use(express.json());
 app.use(cors({
-    // Set this based on where your frontend will be deployed
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',  // Update with frontend URL for deployment
+    origin: 'http://localhost:3000', // Allow requests from localhost:3000
     allowedHeaders: ['Authorization', 'Content-Type'],
 }));
 
-// Routes - Dynamically load routes from the 'routes' folder
+// Dynamically load routes
 readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)));
 
 // Start the server and connect to the database
-const server = () => {
-    app.listen(PORT, () => {
-        console.log(`Listening on port: ${PORT}`);
-    });
-    
-    // Database connection (ensure it is connected when server starts)
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
     db();
-};
-
-server();
+});
