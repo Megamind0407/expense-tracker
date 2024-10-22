@@ -7,16 +7,21 @@ import IncomeItem from '../IncomeItem/IncomeItem';
 import ExpenseForm from './ExpenseForm';
 
 function Expenses() {
-    const {expenses, getExpenses, deleteExpense, totalExpenses} = useGlobalContext()
+    const {expenses, getExpenses, deleteExpense, totalExpenses,isAuthenticated} = useGlobalContext()
 
-    useEffect(() =>{
-        getExpenses()
-    }, [getExpenses])
+    useEffect(() => {
+        if (isAuthenticated) {
+            getExpenses();
+        }
+    }, [isAuthenticated, getExpenses]);
+
+    const displayedTotalExpenses = isAuthenticated ? totalExpenses() : 0;
+    
     return (
         <ExpenseStyled>
             <InnerLayout>
                 <h1>Expenses</h1>
-                <h2 className="total-income">Total Expense: <span>${totalExpenses()}</span></h2>
+                <h2 className="total-income">Total Expense: <span>${displayedTotalExpenses}</span></h2>
                 <div className="income-content">
                     <div className="form-container">
                         <ExpenseForm />

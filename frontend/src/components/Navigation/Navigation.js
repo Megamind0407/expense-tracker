@@ -1,50 +1,76 @@
-import React from 'react'
-import styled from 'styled-components'
-import avatar from '../../assets/avatar.png'
-import { menuItems } from '../../utils/menuItems'
-import { signout } from '../../utils/Icons'
-import { useNavigate } from 'react-router-dom'
+import React from 'react';
+import styled from 'styled-components';
+import avatar from '../../assets/avatar.png';
+import { menuItems } from '../../utils/menuItems';
+import { signout } from '../../utils/Icons';
+import { useNavigate } from 'react-router-dom';
 
+function Navigation({ active, setActive, isAuthenticated, onSignOut }) {
+    const navigate = useNavigate();
 
-
-
-function Navigation({ active, setActive }) {
-    const navigate = useNavigate()
     const handleSignOutClick = () => {
-        navigate('/')
+        onSignOut(); // Call the sign-out function passed as a prop
     };
+
     return (
         <NavStyled>
-            <div className='user-con'>
-                <img src={avatar} alt='' />
-                <div className='text'>
-                    <h2>User</h2>
-                    <p>Your Money</p>
+            {isAuthenticated ? (
+                <div className='user-con'>
+                    <img src={avatar} alt='' />
+                    <div className='text'>
+                        <h2>User</h2>
+                        <p>Your Money</p>
+                    </div>
                 </div>
-            </div>
+            ) : (
+                <div className='auth-buttons'>
+                    <AuthButton primary onClick={() => navigate('/signin')}>
+                        Login
+                    </AuthButton>
+                    <AuthButton onClick={() => navigate('/signup')}>
+                        Sign Up
+                    </AuthButton>
+                </div>
+            )}
             <ul className="menu-items">
                 {menuItems.map((item) => {
-                    return <li
-                        key={item.id}
-                        onClick={() => setActive(item.id)}
-                        className={active === item.id ? 'active' : ''}
-                    >
-                        {item.icon}
-                        <span>{item.title}</span>
-                    </li>
+                    return (
+                        <li
+                            key={item.id}
+                            onClick={() => setActive(item.id)}
+                            className={active === item.id ? 'active' : ''}
+                        >
+                            {item.icon}
+                            <span>{item.title}</span>
+                        </li>
+                    );
                 })}
             </ul>
-            <div className="App">
+            {isAuthenticated && (
                 <div className="bottom-nav">
                     <button onClick={handleSignOutClick}>
                         {signout}Sign Out
                     </button>
                 </div>
-            </div>
-
+            )}
         </NavStyled>
-    )
+    );
 }
+const AuthButton = styled.button`
+    background-color: ${({ primary }) => (primary ? '#4CAF50' : 'transparent')};
+    color: ${({ primary }) => (primary ? '#fff' : 'black')};
+    padding: 0.75rem 1.5rem;
+    border: ${({ primary }) => (primary ? 'none' : '1px solid #ccc')};
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: ${({ primary }) =>
+            primary ? '#45a049' : 'rgba(0, 0, 0, 0.1)'};
+    }
+`;
 
 const NavStyled = styled.nav`
     padding: 2rem 1.5rem;
@@ -59,12 +85,12 @@ const NavStyled = styled.nav`
     justify-content: space-between;
     gap: 2rem;
     
-    .user-con{
+    .user-con {
         height: 100px;
         display: flex;
         align-items: center;
         gap: 1rem;
-        img{
+        img {
             width: 80px;
             height: 80px;
             border-radius: 50%;
@@ -74,19 +100,25 @@ const NavStyled = styled.nav`
             padding: .2rem;
             box-shadow: 0px 1px 17px rgba(0, 0, 0, 0.06);
         }
-        h2{
+        h2 {
             color: rgba(34, 34, 96, 1);
         }
-        p{
+        p {
             color: rgba(34, 34, 96, .6);
         }
     }
 
-    .menu-items{
+    .auth-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .menu-items {
         flex: 1;
         display: flex;
         flex-direction: column;
-        li{
+        li {
             display: grid;
             grid-template-columns: 40px auto;
             align-items: center;
@@ -97,7 +129,7 @@ const NavStyled = styled.nav`
             color: rgba(34, 34, 96, .6);
             padding-left: 1rem;
             position: relative;
-            i{
+            i {
                 color: rgba(34, 34, 96, 0.6);
                 font-size: 1.4rem;
                 transition: all .4s ease-in-out;
@@ -105,12 +137,12 @@ const NavStyled = styled.nav`
         }
     }
 
-    .active{
-            color: rgba(34, 34, 96, 1) !important;
-        i{
+    .active {
+        color: rgba(34, 34, 96, 1) !important;
+        i {
             color: rgba(34, 34, 96, 1) !important;
         }
-        &::before{
+        &::before {
             content: "";
             position: absolute;
             left: 0;
@@ -121,6 +153,7 @@ const NavStyled = styled.nav`
             border-radius: 0 10px 10px 0;
         }
     }
+
     .bottom-nav {
         display: flex;
         margin-top: 2rem;
@@ -138,7 +171,7 @@ const NavStyled = styled.nav`
             gap: 0.5rem;
             
             &:hover {
-                background-color: rgba(0,0,0,0.1);
+                background-color: rgba(0, 0, 0, 0.1);
             }
 
             i {
@@ -148,6 +181,4 @@ const NavStyled = styled.nav`
     }
 `;
 
-
-
-export default Navigation
+export default Navigation;

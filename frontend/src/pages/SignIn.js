@@ -4,25 +4,47 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { useGlobalContext } from '../context/globalContext';
 
-const SignIn = () => {
+const SignIn = ({onSignIn}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState(''); 
+    const [error, setError] = useState('');
+
     const navigate = useNavigate();
     const { clearData, setExpenses, setIncomes } = useGlobalContext();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
+        setError(''); // Reset the error message
+
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/signin', { email, password });
-            localStorage.setItem('token', response.data.token);
-            const userId = response.data.userId;  // Get userId from response
+            const response = await axios.post('http://localhost:5000/api/v1/signin', { email, password }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            console.log("Response:", response.data);
+
+            const { token, userId } = response.data;
+            localStorage.setItem('token', token);
             clearData();
             await loadUserData(userId);
-            navigate('/dashboard');
+            onSignIn(); 
+
         } catch (error) {
-            setError('Invalid email or password. Please try again.');
+            console.error('Sign-in error:', error);
+
+            // Update error handling to cover more cases and provide better feedback
+            if (error.response) {
+                // Server responded with a status other than 200 range
+                setError(error.response.data.message || 'Invalid email or password.');
+            } else if (error.request) {
+                // Request was made but no response received
+                setError('Network error. Please check your connection or try again later.');
+            } else {
+                // Something else caused an error
+                setError('An unexpected error occurred. Please try again.');
+            }
         }
     };
 
@@ -31,11 +53,14 @@ const SignIn = () => {
             const token = localStorage.getItem('token');
             const response = await axios.get(`http://localhost:5000/api/v1/user/${userId}/data`, {
                 headers: {
-                    Authorization: `Bearer ${token}`  // Include the token in the headers
+                    Authorization: `Bearer ${token}`,
                 },
             });
-            setExpenses(response.data.expenses);
-            setIncomes(response.data.incomes); 
+
+            // Update global context with user's data
+            setExpenses(response.data.expenses || []);
+            setIncomes(response.data.incomes || []);
+
         } catch (error) {
             console.error('Failed to load user data', error);
             setError('Failed to load user data. Please try again.');
@@ -70,9 +95,10 @@ const SignIn = () => {
                         />
                     </FormField>
                     {error && <ErrorMessage>{error}</ErrorMessage>}
+
                     <SubmitButton type="submit">Sign In</SubmitButton>
                 </form>
-                <p style={{fontSize : "1rem", marginTop: '1rem'}}>Don't have an account? <RegisterLink onClick={handleRegister}>Register here</RegisterLink></p>
+                <p style={{fontSize: "1rem", marginTop: '1rem'}}>Don't have an account? <RegisterLink onClick={handleRegister}>Register here</RegisterLink></p>
             </FormContainer>
         </SignInWrapper>
     );
@@ -80,6 +106,7 @@ const SignIn = () => {
 
 export default SignIn;
 
+// Styled components (unchanged)
 const SignInWrapper = styled.div`
     display: flex;
     justify-content: center;

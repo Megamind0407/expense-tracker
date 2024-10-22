@@ -2,20 +2,19 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import SignIn from './SignIn';
 
 const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
-    const [showSignIn] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setError(''); // Reset error state before submission
 
         if (!email || !password) {
-            setError('Please enter valid email and password.');
+            setError('Please enter a valid email and password.');
             return;
         }
 
@@ -25,64 +24,64 @@ const SignUp = () => {
                 password,
             });
 
+            console.log(response.data); // Debugging purpose
+
             if (response.data.success) {
-                navigate('/');
+                // Redirect to the SignIn page after successful signup
+                navigate('/signin');
             } else if (response.data.message === 'User already exists') {
-                setError('Already registered');
+                setError('User already registered. Please sign in.');
             } else {
                 setError(response.data.message || 'Error signing up. Please try again.');
             }
         } catch (error) {
-            if (error.response && error.response.data && error.response.data.error !== 'User already exists') {
-                setError('Failed to sign up. Please try again.');
+            console.error('Error details:', error);
+            if (error.response && error.response.data && error.response.data.message) {
+                setError(error.response.data.message);
             } else {
-                setError('Already registered');
+                setError('Failed to sign up. Please check your connection or try again later.');
             }
         }
     };
 
     return (
         <SignUpWrapper>
-            {showSignIn ? (
-                <SignIn />
-            ) : (
-                <FormContainer>
-                    <h2>Sign Up</h2>
-                    <form onSubmit={handleSubmit}>
-                        <FormField>
-                            <label>Email</label>
-                            <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                required
-                            />
-                        </FormField>
-                        <FormField>
-                            <label>Password</label>
-                            <input
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </FormField>
-                        {error && (
-                            <ErrorMessage>
-                                {error === 'Already registered' ? (
-                                    error
-                                ) : (
-                                    
-                                    <>
-                                    {error}. <Link to="/">Sign in here</Link>.
+            <FormContainer>
+                <h2>Sign Up</h2>
+                <form onSubmit={handleSubmit}>
+                    <FormField>
+                        <label>Email</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                        />
+                    </FormField>
+                    <FormField>
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </FormField>
+                    {error && (
+                        <ErrorMessage>
+                            {error === 'User already registered. Please sign in.' ? (
+                                error
+                            ) : (
+                                
+                                <>
+                                    {error} <Link to="/signin">Sign in here</Link>.
                                 </>
-                                )}
-                            </ErrorMessage>
-                        )}
-                        <SubmitButton type="submit">Sign Up</SubmitButton>
-                    </form>
-                </FormContainer>
-            )}
+                            )}
+                        </ErrorMessage>
+                    )}
+                    <SubmitButton type="submit">Sign Up</SubmitButton>
+                </form>
+            </FormContainer>
         </SignUpWrapper>
     );
 };
