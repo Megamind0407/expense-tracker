@@ -22,7 +22,7 @@ function AppContent() {
       case 1:
         return <Dashboard />;
       case 2:
-        return <Dashboard />; // Adjust as needed for different components
+        return <Dashboard />;
       case 3:
         return <Income />;
       case 4:
@@ -38,7 +38,7 @@ function AppContent() {
 
   const handleSignIn = () => {
     setIsAuthenticated(true);
-    navigate("/dashboard"); // Navigate to dashboard after sign-in
+    navigate("/dashboard"); 
   };
 
   return (
@@ -59,7 +59,7 @@ function AppContent() {
                   isAuthenticated={isAuthenticated}
                   onSignOut={() => {
                     setIsAuthenticated(false);
-                    navigate("/"); // Redirect to home after sign out
+                    navigate("/"); 
                   }}
                 />
                 <main>{displayData()}</main>
@@ -67,8 +67,6 @@ function AppContent() {
             }
           />
         )} 
-        
-        {/* Default route when user is not authenticated, showing only the Navigation */}
         <Route
           path="/"
           element={
