@@ -27,7 +27,7 @@ if (process.env.NODE_ENV === 'production') {
 
     // Catch-all route to serve the React app's index.html for all non-API routes
     app.get('*', (req, res) => {
-        res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'));
+        res.sendFile(path.join(__dirname, 'frontend', 'build', 'static', 'index.html'));
     });
 }
 // Start the server and connect to the database
