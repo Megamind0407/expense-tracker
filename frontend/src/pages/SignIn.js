@@ -51,7 +51,7 @@ const SignIn = ({onSignIn}) => {
     const loadUserData = async (userId) => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`http://localhost:5000/api/v1/user/${userId}/data`, {
+            const response = await axios.get(`http://localhost:5000/api/v1/user/${userId}/data` || `https://expense-tracker-2zsi.onrender.com/user/${userId}/data`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
