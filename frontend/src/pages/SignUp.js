@@ -19,7 +19,7 @@ const SignUp = () => {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/api/v1/signup', {
+            const response = await axios.post('https://expense-tracker-2zsi.onrender.com/signin', {
                 email,
                 password,
             });
