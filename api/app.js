@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const { db } = require('./db/db'); // Database connection
 const { readdirSync } = require('fs');
+const path = require('path');
 const app = express();
 
 require('dotenv').config();
@@ -15,8 +16,12 @@ app.use(cors({
     allowedHeaders: ['Authorization', 'Content-Type'],
 }));
 
-// Dynamically load routes
-readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)));
+// Dynamically load routes from the routes directory
+const routesDirectory = path.join(__dirname, 'routes'); // Correct directory path
+readdirSync(routesDirectory).forEach((routeFile) => {
+    const routePath = path.join(routesDirectory, routeFile);
+    app.use('/api/v1', require(routePath)); // Dynamically require the route file
+});
 
 // Start the server and connect to the database
 app.listen(PORT, () => {

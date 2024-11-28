@@ -7,14 +7,12 @@ import Navigation from "./components/Navigation/Navigation";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Income from "./components/Incomes/Income";
 import Expenses from "./components/Expenses/Expenses";
-import { useGlobalContext } from "./context/globalContext";
 import SignUp from './pages/SignUp';
 import SignIn from "./pages/SignIn";
 
 function AppContent() {
   const [active, setActive] = useState(1); // Default to first menu item
   const [isAuthenticated, setIsAuthenticated] = useState(false); 
-  const global = useGlobalContext();
   const navigate = useNavigate();
   
   const displayData = () => {
