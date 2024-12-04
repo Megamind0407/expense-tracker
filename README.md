@@ -1,4 +1,4 @@
-**Expense Tracker App**
+# Expense Tracker App
 
 **Description**
 
@@ -20,18 +20,41 @@ The Expense Tracker is a web application designed to help users manage their per
 - Authentication: JSON Web Tokens (JWT)
 - HTTP Requests: Axios
 
+## Getting Started
+
+**Clone Repository**
+```bash
+git clone https://github.com/Megamind0407/expense-tracker.git
+```
+
+**Installation**
+```
+npm install
+```
+**Run Backend**
+```
+cd backend
+npm run server
+```
+
+**Run Frontend**
+```
+cd frontend
+npm start
+```
+
 **API Endpoints**
 
 **User Authentication** 
 
-- POST /api/users/signup - Register a new user
-- POST /api/users/login - User login
+- POST `/api/users/signup` - Register a new user
+- POST `/api/users/login` - User login
   
 **Transactions**
 
-- POST /api/transactions - Add a new transaction
-- GET /api/transactions - Get all transactions for the logged-in user
-- DELETE /api/transactions/:id - Delete a transaction
+- POST `/api/transactions` - Add a new transaction
+- GET `/api/transactions` - Get all transactions for the logged-in user
+- DELETE `/api/transactions/:id` - Delete a transaction
 
 **Contributing**
 
